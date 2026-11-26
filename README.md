@@ -15,7 +15,7 @@ A 2-CNF has two blocks of variables, $x$ and $y$. Can we fix $x$ so that at leas
 
 Each vertex is one assignment to $y_1,y_2,y_3$. At the root the two mixed clauses force incompatible $x$-assumptions. Allowing $y_1$ gives a witness with four surviving assignments. The sibling that allows $y_2$ has only three. The figure shows one exact example of the general argument.
 
-[Download the offline explorer ZIP](visualization/existential-threshold-2sat-explorer.zip?raw=1) · [Rendering source and worked example](visualization/README.md)
+[Download the offline explorer ZIP](https://raw.githubusercontent.com/DannyExperiments/existential-threshold-2sat/13b9b03483f8999b7a72538508fb3b1dc8e2bcc0/visualization/existential-threshold-2sat-explorer.zip) · [Rendering source and worked example](visualization/README.md)
 
 ## Proof idea
 
