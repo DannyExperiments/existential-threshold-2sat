@@ -1,18 +1,28 @@
 {
   "title": "Existential Probability Thresholds for 2-CNF Formulas",
   "upload_type": "software",
+  "publication_date": "2026-11-27",
+  "version": "1.0.0",
   "creators": [
     {
       "name": "DannyExperiments"
     }
   ],
-  "description": "<p>For a 2-CNF with existential x variables and uniform probabilistic y variables, the algorithm decides whether fixing x leaves at least a p fraction of satisfying assignments to y, and returns such an x-assignment on acceptance. Given the exact integer count threshold, formula processing takes O((1/p)^c times formula size) word operations for c = 1 + 2/log2(4/3) &lt; 5.82. A separately encoded rational has its own exact preprocessing cost.</p><p>This answers the fixed-parameter linear-time question in Open Problem 3 of Shyan Akmal’s dissertation. Earlier methods imply ordinary fixed-parameter tractability with a polynomial formula factor. The proof is internally reviewed. The Python replay is computational corroboration.</p><p>Under human direction, ChatGPT Astra 6.2 (OpenAI) generated the discovery proof and its research packet. Claude Opus 5.5 (Anthropic) assisted with earlier audits and manuscript preparation. OpenAI Codex performed the mathematical review and revised the paper. GPT-6.2 Sol assisted with literature searches and release preparation. DannyExperiments maintains the repository and is the preferred citation identity. No AI system is proposed as an author.</p>",
+  "description": "<p>Given a 2-CNF with existential and random variable blocks, the algorithm decides whether an existential assignment leaves at least the specified number of satisfying random assignments and returns a witness when one exists. For a positive probability threshold p, formula processing takes O((1/p)^c times formula size) word operations with c = 1 + 2/log₂(4/3), once the exact integer cutoff is supplied. Conversion of a separately encoded rational is charged separately.</p><p>It answers the linear-formula-time question in Open Problem 3 of Shyan Akmal’s thesis in the exact count-threshold model. Earlier methods give ordinary fixed-parameter tractability with a polynomial formula factor. The exact Python replay corroborates the proof on finite inputs.</p><p>Includes the manuscript, LaTeX and bibliography, proof guides, audit summaries, exact replay, and interactive illustration. Internally reviewed. External peer review is pending.</p><p>Under human direction, ChatGPT Astra 6.2 (OpenAI) generated the discovery proof and research packet. Claude Opus 5.5 (Anthropic) assisted with earlier audits and manuscript preparation. OpenAI Codex performed mathematical review and revised the paper. GPT-6.2 Sol (OpenAI) assisted with literature and release preparation. DannyExperiments is the project citation identity.</p>",
   "keywords": [
     "2-SAT",
     "threshold counting",
     "parameterized complexity",
     "existential majority"
   ],
+  "access_right": "open",
   "license": "other-closed",
-  "notes": "All rights reserved. No repository-wide reuse license is granted."
+  "notes": "All rights reserved. Publicly downloadable files are supplied without a repository-wide reuse license.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DannyExperiments/existential-threshold-2sat/releases/tag/v1.0.0",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
 }

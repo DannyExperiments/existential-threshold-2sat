@@ -1,14 +1,13 @@
 # Existential probability thresholds for 2-CNF
 
+[![Repository verification](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/verify.yml) [![Replay verification](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/replay.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/replay.yml) [![PDF build](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/pdf.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/pdf.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24567308.svg)](https://doi.org/10.5281/zenodo.24567308)
+
 A 2-CNF has two blocks of variables, $x$ and $y$. Can we fix $x$ so that at least a $p$-fraction of the uniform assignments to $y$ satisfy the formula?
 
 **Result.** The decision and witness search take $O((1/p)^c|\varphi|)$ word operations for $c=1+2/\log_2(4/3)<5.82$, given the integer cutoff $N=\lceil 2^{|y|}p\rceil$. This answers Open Problem 3 in Akmal’s thesis in the exact count-threshold model. Reading and converting a separately encoded rational has its own cost.
 
 [Paper PDF](paper/manuscript.pdf) · [LaTeX source](paper/manuscript.tex) · [Original Catalog Q74](https://github.com/10m-u/open-problems-catalog/blob/ca8d4d44ba3db527f19f28928c240168f545ecfe/problems/computer_science_ai/theory-of-computation-algorithms-part-1.md#q74) · [Akmal’s Open Problem 3](https://www.shyanakmal.com/publications/ShyanAkmal_PhD-Thesis.pdf#page=92)
-
-[![Repository verification](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/verify.yml)
-[![Replay verification](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/replay.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/replay.yml)
-[![PDF build](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/pdf.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/pdf.yml)
 
 ## Watch one conflict become two branches
 
@@ -31,3 +30,5 @@ Akmal and Williams already use this counting technique. Standard grouped feasibi
 The Python replay cross-checks 1,603,370 exact formula–threshold pairs against direct enumeration, checks every returned witness, and replays the pictured example. [Run the replay](REPRODUCIBILITY.md) · [Review status](STATUS.md) · [Claim and encoding scope](CLAIM_SCOPE_AND_LIMITATIONS.md)
 
 DannyExperiments is the preferred citation identity. [AI disclosure](AI_DISCLOSURE.md) · [Citation metadata](CITATION.cff)
+
+[Release v1.0.0](https://github.com/DannyExperiments/existential-threshold-2sat/releases/tag/v1.0.0) · [Version DOI](https://doi.org/10.5281/zenodo.24567308)

@@ -1,8 +1,26 @@
 cff-version: 1.2.0
-message: "Please cite DannyExperiments and identify the version used."
+message: "Cite this version of the research release."
 title: "Existential Probability Thresholds for 2-CNF Formulas"
-type: software
 authors:
   - name: "DannyExperiments"
+type: software
+version: "1.0.0"
+date-released: 2026-11-27
 repository-code: "https://github.com/DannyExperiments/existential-threshold-2sat"
-abstract: "Proof and exact replay for the existential uniform probability threshold problem for 2-CNF, with a fixed-parameter linear formula bound."
+keywords:
+  - "2-SAT"
+  - "threshold counting"
+  - "parameterized complexity"
+  - "existential majority"
+doi: "10.5281/zenodo.24567308"
+url: "https://doi.org/10.5281/zenodo.24567308"
+preferred-citation:
+  type: software
+  title: "Existential Probability Thresholds for 2-CNF Formulas"
+  authors:
+    - name: "DannyExperiments"
+  version: "1.0.0"
+  date-released: 2026-11-27
+  doi: "10.5281/zenodo.24567308"
+  url: "https://doi.org/10.5281/zenodo.24567308"
+  repository-code: "https://github.com/DannyExperiments/existential-threshold-2sat"
