@@ -1,0 +1,5 @@
+Exhaustive normalized formulas: 524,553 | exact threshold pairs: 1,573,389
+Seeded random formulas: 1,000 | exact threshold pairs: 29,973
+Targeted early cutoff and repeated label/assumption cases: 8 exact threshold pairs
+Worked example counts: root B = 6/8, allow y1 = 4/8, allow y2 = 3/8
+PASS: exact decisions, returned models, and search call ceilings

@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "Please cite DannyExperiments and identify the version used."
+title: "Existential Probability Thresholds for 2-CNF Formulas"
+type: software
+authors:
+  - name: "DannyExperiments"
+repository-code: "https://github.com/DannyExperiments/existential-threshold-2sat"
+abstract: "Proof and exact replay for the existential uniform probability threshold problem for 2-CNF, with a fixed-parameter linear formula bound."

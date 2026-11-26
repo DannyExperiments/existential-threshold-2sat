@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Existential Threshold 2-SAT Explorer</title>
+<style>
+:root{color-scheme:dark;background:#0d1824;color:#f1f6fb;font:16px/1.55 system-ui,sans-serif;--card:#132638;--rule:#40576d;--mint:#66dfc3;--muted:#b1c7d9;--gold:#ffd480}
+*{box-sizing:border-box}
+body{max-width:900px;margin:auto;padding:clamp(14px,4vw,32px)}
+h1{font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.1;margin:.45em 0 .35em}
+h2{font-size:1.2rem;margin:.15em 0 .45em}
+p{margin:.35em 0 .85em}
+header p,.muted{color:var(--muted)}
+code{font:600 .95em/1.4 system-ui,sans-serif;color:var(--mint)}
+button,input{font:inherit}
+button{appearance:none;background:#172f43;color:inherit;border:1px solid var(--rule);border-radius:9px;padding:6px 11px;min-height:42px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:#0d1824;font-weight:700}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.card{background:var(--card);border:1px solid #2a455c;border-radius:14px;padding:clamp(12px,3vw,23px);margin:1em 0}
+.grid{display:grid;grid-template-columns:1.03fr .97fr;gap:18px}
+.buttons{display:flex;flex-wrap:wrap;gap:7px;margin:.6em 0 1em}
+canvas{width:100%;height:auto;aspect-ratio:4/3;display:block;border:1px solid #30516b;border-radius:12px;background:#0d1d2c;touch-action:none}
+output{color:var(--mint);font-weight:750;font-size:1.35rem}
+output[data-pass="false"]{color:var(--gold)}
+label{display:flex;align-items:center;gap:12px;font-size:.93rem}
+input[type="range"]{width:100%;min-height:36px;accent-color:var(--mint)}
+table{width:100%;border-collapse:collapse}
+td,th{padding:.4em .5em;border-bottom:1px solid var(--rule);text-align:left}
+th[scope=row]{white-space:nowrap}
+.points{font-variant-numeric:tabular-nums;letter-spacing:.052em;overflow-wrap:anywhere}
+.badge{display:inline-block;width:.72em;height:.72em;border-radius:50%;margin-right:.35em;background:var(--mint)}
+.badge.missing{background:#6d879d}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.buttons{gap:5px}body{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+<h1>Existential Threshold 2-SAT</h1>
+<p>Fix two existential bits and ask whether at least four of eight uniform assignments to three other bits survive.</p>
+</header>
+<section class="card" aria-labelledby="formula">
+<h2 id="formula">The worked formula</h2>
+<table>
+<tbody>
+<tr><th scope="row">x-only</th><td><code>A = (¬x₁ ∨ ¬x₂)</code></td></tr>
+<tr><th scope="row">y-only</th><td><code>B = (y₁ ∨ y₃)</code></td></tr>
+<tr><th scope="row">Mixed</th><td><code>(x₁ ∨ y₁) ∧ (x₂ ∨ y₂)</code></td></tr>
+</tbody>
+</table>
+</section>
+<section class="card" aria-labelledby="search">
+<h2 id="search">Search the permitted y-literals</h2>
+<div class="buttons" aria-label="Search node">
+<button type="button" data-stage="0" aria-pressed="true">Root</button>
+<button type="button" data-stage="1" aria-pressed="false">Allow y₁</button>
+<button type="button" data-stage="2" aria-pressed="false">Allow y₂</button>
+</div>
+<div class="grid">
+<div>
+<canvas id="cube" width="720" height="540" role="img" aria-label="Rotatable cube of eight assignments to y. A list of passing assignments follows in the search detail."></canvas>
+<label for="camera">Cube rotation <input id="camera" type="range" min="0" max="360" value="34"></label>
+<p class="muted"><span class="badge"></span>Passes B and S &nbsp; <span class="badge missing"></span>Filtered out</p>
+</div>
+<div aria-live="polite">
+<h2 id="step-title">Root</h2>
+<p><output id="count" data-pass="true">6 / 8</output> &nbsp; <span class="muted">Threshold 4 / 8</span></p>
+<p id="detail">B passes the count test. Forcing both x-units makes A inconsistent.</p>
+<p class="points" id="points"></p>
+<p id="action"></p>
+</div>
+</div>
+</section>
+<section class="card">
+<h2>The general argument</h2>
+<p>A passing assignment forces at most <code>⌊log₂(1/p)⌋</code> distinct y-literals. A conflict in the current x-units has one or two sources. Some source label must be allowed, so the search branches at most twice at each step. Every permitted set also gets its own exact count test.</p>
+<p class="muted">This cube shows the worked instance. The proof handles all 2-CNFs with the stated formula and threshold encoding.</p>
+</section>
+<script>
+"use strict";
+const stages = [
+  {title:"Root · S = ∅",axis:null,detail:"B passes the count test. With both labels forbidden, the mixed clauses force x₁ = x₂ = 1. A gives x₁ → ¬x₂, so these assumptions conflict.",action:"Branch on y₁ or y₂. A feasible x-assignment must release at least one of these assumptions."},
+  {title:"Allow y₁ · S = {y₁}",axis:0,detail:"The count for B ∧ y₁ is 4. The remaining x-assumption is x₂ = 1.",action:"Accept with (x₁, x₂) = (0, 1). This x-assignment forces y₁ and attains the threshold exactly."},
+  {title:"Allow y₂ · S = {y₂}",axis:1,detail:"The count for B ∧ y₂ is 3. The combination (y₁, y₃) = (0, 0) is excluded.",action:"Prune this branch before testing the x-assumptions. This sibling is shown for comparison after the other branch succeeds."}
+];
+const points = Array.from({length:8},(_, i)=>[(i>>2)&1,(i>>1)&1,i&1]);
+const edges = points.flatMap((a,i)=>points.slice(i+1).filter(b=>a.filter((v,j)=>v!==b[j]).length===1).map(b=>[a,b]));
+const buttons = [...document.querySelectorAll("[data-stage]")];
+const canvas = document.querySelector("#cube");
+const ctx = canvas.getContext("2d");
+const camera = document.querySelector("#camera");
+let stage = 0;
+function passes(p, axis) { return Boolean((p[0] || p[2]) && (axis === null || p[axis])); }
+function project(p, angle) {
+  const [x,y,z] = p.map(v=>v*2-1);
+  const x1 = x*Math.cos(angle)-y*Math.sin(angle);
+  const y1 = x*Math.sin(angle)+y*Math.cos(angle);
+  const depth = y1*Math.cos(.41)-z*Math.sin(.41);
+  const height = y1*Math.sin(.41)+z*Math.cos(.41);
+  const scale = 137*8/(8+depth);
+  return [360+scale*x1,265-scale*height,depth];
+}
+function draw() {
+  ctx.clearRect(0,0,720,540);
+  const axis = stages[stage].axis;
+  const xyz = new Map(points.map(p=>[p,project(p,Number(camera.value)*Math.PI/180)]));
+  function line([a,b]) {
+    ctx.beginPath();
+    ctx.moveTo(...xyz.get(a).slice(0,2));
+    ctx.lineTo(...xyz.get(b).slice(0,2));
+    const link = passes(a,axis)&&passes(b,axis);
+    ctx.strokeStyle = link ? "#66dfc3" : "#536b80";
+    ctx.lineWidth = link ? 4 : 3;
+    ctx.stroke();
+  }
+  [...edges].sort((a,b)=>b.reduce((s,p)=>s+xyz.get(p)[2],0)-a.reduce((s,p)=>s+xyz.get(p)[2],0)).forEach(line);
+  for (const p of [...points].sort((a,b)=>xyz.get(b)[2]-xyz.get(a)[2])) {
+    const [x,y] = xyz.get(p);
+    const active = passes(p,axis);
+    ctx.beginPath();
+    ctx.arc(x,y,active?13:10,0,Math.PI*2);
+    ctx.fillStyle = active ? "#66dfc3" : "#6d879d";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#0d1d2c";
+    ctx.stroke();
+    ctx.font = "bold 22px system-ui";
+    ctx.lineWidth = 5;
+    ctx.strokeText(p.join(""),x+15,y-10);
+    ctx.fillStyle = active ? "#eef9f7" : "#b1c7d9";
+    ctx.fillText(p.join(""),x+15,y-10);
+  }
+}
+function select(index) {
+  stage = index;
+  const s = stages[stage];
+  const passing = points.filter(p=>passes(p,s.axis)).map(p=>p.join(""));
+  buttons.forEach((button,j)=>button.setAttribute("aria-pressed",String(j===stage)));
+  document.querySelector("#step-title").textContent = s.title;
+  document.querySelector("#detail").textContent = s.detail;
+  document.querySelector("#points").textContent = "Passing y₁y₂y₃: "+passing.join(" · ");
+  document.querySelector("#action").textContent = s.action;
+  const number = document.querySelector("#count");
+  number.textContent = passing.length+" / 8";
+  number.dataset.pass = String(passing.length>=4);
+  draw();
+}
+buttons.forEach((button,i)=>button.addEventListener("click",()=>select(i)));
+camera.addEventListener("input",draw);
+let pointer = null;
+canvas.addEventListener("pointerdown",event=>{
+  canvas.setPointerCapture(event.pointerId);
+  pointer = {id:event.pointerId, x:event.clientX, base:Number(camera.value)};
+});
+canvas.addEventListener("pointermove",event=>{
+  if (pointer?.id!==event.pointerId) return;
+  camera.value = String((pointer.base+Math.round((event.clientX-pointer.x)*1.2)%360+360)%360);
+  draw();
+});
+canvas.addEventListener("lostpointercapture",()=>{pointer=null;});
+select(0);
+</script>
+</body>
+</html>

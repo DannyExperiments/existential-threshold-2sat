@@ -1,0 +1,89 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\urlstyle{same}
+\hypersetup{pdftitle={Existential probability thresholds for 2-CNF formulas},pdfauthor={DannyExperiments}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\size}{\lvert\varphi\rvert}
+\newcommand{\countsat}[1]{\#(#1)}
+\DeclareMathSizes{8}{8}{8}{8}
+\DeclareMathSizes{9}{9}{8}{8}
+\DeclareMathSizes{10.95}{10.95}{8}{8}
+\title{Existential Probability Thresholds for 2-CNF Formulas}
+\date{}
+\begin{document}
+\begin{abstract}
+Given a 2-CNF \(\varphi(x,y)\), we ask whether fixing \(x\) can leave at least a \(p\) fraction of the uniform assignments to \(y\) satisfying. With the equivalent integer count threshold supplied, the decision and witness search take \(O((1/p)^c\size)\) word operations, where \(c=1+2/\log_2(4/3)<5.82\). This gives an affirmative answer to Open Problem~3 in Akmal's thesis. A pair of conflicting unit assumptions gives at most two branches on the probabilistic literals enabled by mixed clauses. The count test at each node uses a disjoint clause cover. We account separately for conversion of an input rational threshold.
+\end{abstract}
+\maketitle
+
+\section{Problem and result}
+Let \(x\) and \(y\) be disjoint lists of \(n_x\) and \(n_y\) Boolean variables. For a formula \(\psi\) on the specified domain of \(y\), let \(\countsat{\psi}\) be its number of satisfying assignments on that domain, including assignments to unused variables. The input size \(\size\) counts declared variables, clauses, and literal occurrences in the indexed representation, plus one. We use a word RAM with \(\Theta(\log(2+\size))\)-bit words. For \(p\in(0,1)\), set \(N=\lceil 2^{n_y}p\rceil\). The question is whether some \(x\)-assignment \(\alpha\) has \(\countsat{\varphi(\alpha,y)}\ge N\).
+
+Akmal and Williams give a polynomial-in-\(1/p\) linear-time threshold algorithm for an unquantified 2-CNF and an existential algorithm based on enumerating the possible residual units \cite[Theorems~3.1 and~6.1]{aw}. Akmal's thesis gives the existential bound \(n^{O(\log(1/p))}\size\) and asks for \(f(1/p)\size\) time \cite[Theorem~4.16 and Open Problem~3]{akmal}.
+
+\begin{theorem}\label{thm:main}
+Given the binary integer \(N\), the existential threshold problem can be solved, with an \(x\)-witness on acceptance, in
+\[
+ O\bigl(2^{cd}\size\bigr)\subseteq O\bigl((1/p)^c\size\bigr),
+ \qquad d=n_y-\lceil\log_2 N\rceil,\qquad
+ c=1+\frac{2}{\log_2(4/3)}.
+\]
+For a separately encoded positive rational \(p=a/b<1\) with at most \(L\) bits each for numerator and denominator, \(N\) can first be computed in \(O((n_y+L)L)\) bit operations. This preprocessing is linear in \(n_y+1\) for fixed rational \(p\).
+\end{theorem}
+
+\section{Decomposition and unit conflicts}
+Discard tautologies, collapse repeated literals in a clause, and reject an empty clause. Write \(A\) and \(B\) for the \(x\)-only and \(y\)-only subformulas. Write every mixed clause as \(u\vee v\) with \(u\) on \(x\) and \(v\) on \(y\). Reject unsatisfiable \(A\), and retain one model of \(A\) by the linear-time 2-SAT algorithm \cite{apt}.
+
+For every model \(\alpha\) of \(A\) let \(T(\alpha)\) be the set of distinct labels \(v\) for which some mixed clause \(u\vee v\) has \(\alpha(u)=0\). The residual is \(B\wedge\bigwedge T(\alpha)\). If its count is at least \(N\), its unit set is consistent and \(2^{n_y-|T(\alpha)|}\ge N\), so \(|T(\alpha)|\le d\). Also \(2^d\le 2^{n_y}/N\le1/p\). At a search node \(S\) of permitted labels, impose the set \(U(S)\) of \(x\)-units \(u\) from all mixed clauses \(u\vee v\) with \(v\notin S\). Remember one active label for each imposed unit. Models of \(A\wedge\bigwedge U(S)\) are precisely the models \(\alpha\) of \(A\) with \(T(\alpha)\subseteq S\).
+
+\begin{lemma}\label{lemma:conflict}
+Given satisfiable \(A\), any inconsistency after imposing \(x\)-units has a certificate consisting of at most two imposed units. A witness for consistency or the certificate for inconsistency can be found in linear time.
+\end{lemma}
+\begin{proof}
+In the implication graph of \(A\), a clause \(a\vee b\) contributes edges \(\neg a\to b\) and \(\neg b\to a\), with \(a=b\) for units. Flood from the imposed units simultaneously and mark each reached literal with one source. If \(q\) and \(\neg q\) are reached, their sources imply them, so the one or two sources give a conflict.
+
+Otherwise let \(R\) be the reached set, and take the retained model of \(A\). Change it to make all literals of \(R\) true and preserve other variables. If an edge has a newly true antecedent, closure puts its consequent in \(R\). If an edge has a newly false consequent, closure along the contrapositive edge puts the complement of its antecedent in \(R\). Thus no edge is newly violated. The updated assignment models \(A\) and includes every imposed unit. The flood and update scan a linear number of entries.
+\end{proof}
+
+\section{Counting on the probabilistic variables}
+Set \(\lambda=\log_2(4/3)\). Scan the genuine binary clauses of \(B\) and greedily collect clauses on pairwise disjoint variable pairs. If the selected size \(r\) ever satisfies
+\[
+ (3/4)^r\le 2^{-(d+1)},
+\]
+reject the input. Indeed, the \(r\) clauses are independent under the uniform \(y\)-assignment, and \(2^{n_y-d-1}<N\) follows from \(\lceil\log_2 N\rceil=n_y-d\), also when \(N=1\). If the scan completes, the family is maximal and \(r<(d+1)/\lambda\). Its variables form a set \(H\) of cardinality \(2r\) meeting every genuine binary clause. This is the clause cover used in the earlier unquantified threshold algorithm \cite[Theorem~3.1]{aw}.
+
+For a query \(S\), enumerate all assignments \(\beta\) to \(H\) and restrict \(B\wedge\bigwedge S\) by each. The remaining clauses are units or already decided clauses. A falsified clause or inconsistent units give count zero. Otherwise \(u\) distinct remaining units leave exactly \(2^{n_y-|H|-u}\) assignments. Distinct assignments to \(H\) partition the \(y\)-space, so summing these contributions gives \(\countsat{B\wedge\bigwedge S}\).
+
+Use a zero-initialized array of \(n_y+1\) single-bit entries to sum the powers of two. For each term \(2^j\), start at \(j\), clear successive ones, and set the first zero. Each insertion sets one bit and each clearing cancels a bit set by an earlier insertion, so all carries cost \(O(2^{2r})\) word operations in total. Compare with \(N\) by a high-to-low scan. A query therefore costs \(O(2^{2r}\size)\) word operations, including comparisons and initialization, using marks to scan and count the residual units in linear time per \(\beta\).
+
+The early stopping test is exact. Write \(e=2r-d-1\), maintain \(3^r\) by multiplication by three, and test \(3^r\le 2^e\), with failure when \(e<0\). For \(r\ge1\), \(3^r\) cannot equal \(2^e\), so comparing bit lengths suffices. The scan stops by \(r=3(d+1)\) since \((3/4)^3<1/2\). The extra cost of all small-integer arithmetic is \(O((d+1)^2)\) bit operations. Compute \(d\) from the bit length of \(N-1\), with bit length zero at zero.
+
+\section{Search and running time}
+Start at \(S=\varnothing\). Return failure at any node where \(S\) is inconsistent, \(|S|>d\), or \(\countsat{B\wedge\bigwedge S}<N\). Otherwise use Lemma~\ref{lemma:conflict} on \(A\) with \(U(S)\). On consistency return its \(x\)-model. On a conflict, let \(v_1,v_2\) be the one or two labels attached to its source units. Recurse once on \(S\cup\{v_i\}\) for each distinct such label, and return success if a child succeeds. Each label added at a branch lies outside \(S\).
+
+An accepted \(x\)-model \(\alpha\) has \(T(\alpha)\subseteq S\), hence its residual count is at least the passing count for \(B\wedge\bigwedge S\). For completeness, fix a witnessing \(\alpha\). When \(S\subseteq T(\alpha)\), all three pruning tests pass. If the imposed units conflict, \(\alpha\) falsifies at least one conflict source \(u\), and its active label \(v\) belongs to \(T(\alpha)\setminus S\). That child preserves the invariant. After at most \(d\) such steps the process accepts, because at \(S=T(\alpha)\) the witness satisfies every imposed unit.
+
+There are at most \(2^{d+2}-1\) calls including calls rejected immediately for depth. Each active call uses a linear-time flood and count time \(O(2^{2r}\size)\). The resulting time is
+\[
+ O(2^{d+2r}\size)=
+ O\bigl(2^{d(1+2/\lambda)}\size\bigr).
+\]
+The one-time arithmetic cost \(O((d+1)^2)\) is absorbed by this bound since \(d\le n_y\le\size\). For a rational threshold, divide \(a2^{n_y}\) by \(b\) using binary long division and increment the quotient if the remainder is nonzero. The division processes at most \(n_y+L\) bits with an \(O(L)\)-bit remainder, yielding the stated preprocessing bound. This completes the proof of Theorem~\ref{thm:main}.
+
+\section{Scope and comparisons}
+The strict comparison \(>p\) follows by replacing \(N\) with \(\lfloor 2^{n_y}p\rfloor+1\). The formula-processing argument allows any supplied integer count threshold between \(1\) and \(2^{n_y}\). The rational encoding cost is charged separately.
+
+For the noncounting subproblem, assigning a Boolean selector \(z_v\) to each label and adding \(u\vee z_v\) for each mixed clause encodes permitted labels in a 2-CNF. Group Deletion Almost 2-SAT controls how many groups are removed \cite[Proposition~22]{foucaud}. Explicitly projecting to unary and binary label conflicts and using parameterized enumeration \cite[Theorem~6]{enumeration} gives ordinary FPT after polynomial-time preprocessing. The present search discovers those conflicts on demand and couples feasibility to a count that depends on \emph{which} labels are permitted, with a linear formula factor.
+
+For a lower bound on the type of dependence, take a graph with vertex clauses \(x_i\vee x_j\) for its edges, and a mixed clause \(\neg x_i\vee y_i\) per vertex. The probability for a vertex cover \(C\) is \(2^{-|C|}\), and all other assignments have probability zero. Thus \(p=2^{-k}\) encodes Vertex Cover with budget \(k\). The standard ETH lower bound for Vertex Cover \cite[Chapter~14]{cygan} excludes time \(2^{o(\log(1/p))}\size^{O(1)}\) under ETH. The numerical exponent in Theorem~\ref{thm:main} is an upper bound.
+
+\section*{Research disclosure}
+Under human direction, ChatGPT Astra 6.2 (OpenAI) generated the discovery proof and its research packet. Claude Opus 5.5 (Anthropic) assisted with earlier audits and manuscript preparation. OpenAI Codex performed the mathematical review and revised the paper. GPT-6.2 Sol assisted with literature searches and release preparation. DannyExperiments maintains the repository and is the preferred citation identity. No AI system is proposed as an author. The replay is computational corroboration. The proof has been reviewed internally.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}
