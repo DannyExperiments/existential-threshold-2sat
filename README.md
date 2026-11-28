@@ -1,5 +1,6 @@
 # Existential probability thresholds for 2-CNF
 
+[![Lean · two-source unit conflict](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/lean.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/lean.yml)
 [![Repository verification](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/verify.yml) [![Replay verification](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/replay.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/replay.yml) [![PDF build](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/pdf.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/existential-threshold-2sat/actions/workflows/pdf.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24567308.svg)](https://doi.org/10.5281/zenodo.24567308)
 
@@ -32,3 +33,7 @@ The Python replay cross-checks 1,603,370 exact formula–threshold pairs against
 DannyExperiments is the preferred citation identity. [AI disclosure](AI_DISCLOSURE.md) · [Citation metadata](CITATION.cff)
 
 [Release v1.0.0](https://github.com/DannyExperiments/existential-threshold-2sat/releases/tag/v1.0.0) · [Version DOI](https://doi.org/10.5281/zenodo.24567308)
+
+## Lean verification
+
+For any satisfiable implication graph with involutive literal negation and contraposed edges, if its imposed units have no joint model then one or two source units already have no joint model. The proof constructs an extending model when propagation is consistent. Runtime and model counting remain in the paper. [Source and replay](formalization/README.md)

@@ -1,5 +1,6 @@
 # Release manifest
 
+- `.github/workflows/lean.yml`
 - `.github/workflows/pdf.yml`
 - `.github/workflows/replay.yml`
 - `.github/workflows/verify.yml`
@@ -20,6 +21,9 @@
 - `STATUS.md`
 - `audits/public_safe_reports/LITERATURE_AUDIT.md`
 - `audits/public_safe_reports/MATHEMATICAL_AUDIT.md`
+- `formalization/Conflict.lean`
+- `formalization/README.md`
+- `formalization/expected-axioms.txt`
 - `paper/BUILD.md`
 - `paper/manuscript.pdf`
 - `paper/manuscript.tex`
